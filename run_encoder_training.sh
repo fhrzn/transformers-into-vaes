@@ -1,5 +1,5 @@
 dataset=$1
-
+# python finetune.py -bs 8 -c pretraining_configs/t5_vae_32_max_none_0.15_yf.yaml -d yelp -t -pe -eo
 # Max pooling.
 
 ## Dropout 0.15.

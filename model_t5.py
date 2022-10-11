@@ -165,7 +165,7 @@ class T5VAE(LightningModule):
         return loss
 
     def validation_epoch_end(self, outputs):
-        ppl, nll, elbo, rec, kl, mi, au = calc_all(self, self.val_dataloader())
+        ppl, nll, elbo, rec, kl, mi, au = calc_all(self, self.trainer.val_dataloaders)
         self.log("val_ppl", ppl)
         self.log("val_nll", nll)
         self.log("val_elbo", elbo)

@@ -16,6 +16,7 @@ from pytorch_lightning.callbacks.early_stopping import EarlyStopping
 from pytorch_lightning.loggers import TensorBoardLogger
 from pytorch_lightning.plugins import DDPPlugin
 from torch.utils.data import DataLoader
+# from datamodule import DatasetDataModule
 
 pretty_errors.configure(
     filename_display=pretty_errors.FILENAME_EXTENDED,
@@ -102,6 +103,7 @@ if __name__ == "__main__":
         validate_set, batch_size=batch_size, num_workers=cpu_count
     )
     test_dataloader = DataLoader(test_set, batch_size=batch_size, num_workers=cpu_count)
+    # datamodule = DatasetDataModule(dataset, tokenizer, out_dim, batch_size)
 
     if args.train:
 
@@ -149,12 +151,12 @@ if __name__ == "__main__":
 
             trainer = pl.Trainer(
                 gpus=-1,
-                accelerator="ddp",
+                # accelerator="cuda",
                 callbacks=[early_stop_callback, checkpoint_callback],
                 max_epochs=15,
-                plugins=DDPPlugin(
-                    find_unused_parameters=True
-                ),  # We ignore params from cross-attention.
+                # plugins=DDPPlugin(
+                #     find_unused_parameters=True
+                # ),  # We ignore params from cross-attention.
                 log_every_n_steps=1,
                 logger=TensorBoardLogger(
                     save_dir=os.getcwd(),
@@ -164,7 +166,7 @@ if __name__ == "__main__":
             )
 
             trainer.fit(
-                model, train_dataloader=train_dataloader, val_dataloaders=val_dataloader
+                model, train_dataloaders=train_dataloader, val_dataloaders=val_dataloader
             )
 
             model = model_class.load_from_checkpoint(

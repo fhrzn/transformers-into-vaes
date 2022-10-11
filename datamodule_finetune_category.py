@@ -9,7 +9,7 @@ class CategoryFinetuneDataset(Dataset):
 
         self.tokenizer = tokenizer
         self.out_dim = out_dim
-        with open(path, "r") as rf:
+        with open(path, "r", encoding='utf-8') as rf:
             self.data = rf.readlines()
 
     def __getitem__(self, index):
