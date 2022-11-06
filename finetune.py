@@ -209,13 +209,13 @@ if __name__ == "__main__":
         )
 
         trainer = pl.Trainer(
-            gpus=-1,
-            accelerator="ddp",
+            accelerator="gpu",
+            devices=1,
             callbacks=[early_stop_callback, checkpoint_callback],
             max_epochs=10,
-            plugins=DDPPlugin(
-                find_unused_parameters=True
-            ),  # We ignore params from cross-attention.
+            # plugins=DDPPlugin(
+            #     find_unused_parameters=True
+            # ),  # We ignore params from cross-attention.
             log_every_n_steps=1,
             logger=TensorBoardLogger(
                 save_dir=os.getcwd(), version=experiment_name, name="lightning_logs"
