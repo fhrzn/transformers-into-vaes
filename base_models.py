@@ -31,9 +31,9 @@ datasets = {
     },
     "yelp": {
         "dataset_class": CategoryFinetuneDataset,
-        "train_file": "./transformers-into-vae/data/optimus/yelp_data/train.txt",
-        "validate_file": "./transformers-into-vae/data/optimus/yelp_data/valid.txt",
-        "test_file": "./transformers-into-vae/data/optimus/yelp_data/test.txt",
+        "train_file": "./transformers-into-vaes/data/optimus/yelp_data/train.txt",
+        "validate_file": "./transformers-into-vaes/data/optimus/yelp_data/valid.txt",
+        "test_file": "./transformers-into-vaes/data/optimus/yelp_data/test.txt",
         "train_dataset_size": 100000,
     },
     "snli": {
