@@ -128,7 +128,7 @@ if __name__ == "__main__":
 
             experiment_suffix = "_enconly"
 
-            model.fixed_reg_weight = 0
+            model.fixed_reg_weight = 0      # pretrain encoder/regular toggle
             if conf.freeze_decoder:
                 model.freeze_decoder()
                 # experiment_suffix += "_freezedec"
@@ -177,7 +177,7 @@ if __name__ == "__main__":
                 latent_dim=conf.latent_dim,
                 pooling_strategy=conf.pooling_strategy,
                 min_z=conf.min_z,
-                fixed_reg_weight=None,
+                fixed_reg_weight=None,      
                 denoise_percentage=conf.denoise_percentage,
                 base_model=conf.base_model_name,
             )
