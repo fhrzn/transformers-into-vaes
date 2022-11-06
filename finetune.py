@@ -223,7 +223,7 @@ if __name__ == "__main__":
         )
         trainer.fit(
             model,
-            train_dataloader=train_dataloader,
+            train_dataloaders=train_dataloader,
             val_dataloaders=val_dataloader,
         )
 
