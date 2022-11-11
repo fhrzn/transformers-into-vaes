@@ -36,6 +36,13 @@ datasets = {
         "test_file": "./transformers-into-vaes/data/optimus/yelp_data/test.txt",
         "train_dataset_size": 100000,
     },
+    "jigsaw": {
+        "dataset_class": CategoryFinetuneDataset,
+        "train_file": "./transformers-into-vaes/data/optimus/jigsaw/train.txt",
+        "validation_file": "./transformers-into-vaes/data/optimus/jigsaw/valid.txt",
+        "test_file": "./transformers-into-vaes/data/optimus/jigsaw/test.txt",
+        "train_dataset_size": 270780
+    },
     "snli": {
         "dataset_class": LineByLineDataset,
         "train_file": "data/optimus/snli_data/train.txt",
