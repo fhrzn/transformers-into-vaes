@@ -39,7 +39,7 @@ datasets = {
     "jigsaw": {
         "dataset_class": CategoryFinetuneDataset,
         "train_file": "./transformers-into-vaes/data/optimus/jigsaw/train.txt",
-        "validation_file": "./transformers-into-vaes/data/optimus/jigsaw/valid.txt",
+        "validate_file": "./transformers-into-vaes/data/optimus/jigsaw/valid.txt",
         "test_file": "./transformers-into-vaes/data/optimus/jigsaw/test.txt",
         "train_dataset_size": 270780
     },
