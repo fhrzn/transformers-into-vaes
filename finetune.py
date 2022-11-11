@@ -18,6 +18,10 @@ from pytorch_lightning.plugins import DDPPlugin
 from torch.utils.data import DataLoader
 # from datamodule import DatasetDataModule
 
+# wandb
+import wandb
+from pytorc_lightning.loggers import WandbLogger
+
 pretty_errors.configure(
     filename_display=pretty_errors.FILENAME_EXTENDED,
 )
@@ -150,19 +154,16 @@ if __name__ == "__main__":
             )
 
             trainer = pl.Trainer(
-                gpus=-1,
-                # accelerator="cuda",
+                # gpus=-1,
+                accelerator="gpu",
+                devices=1,
                 callbacks=[early_stop_callback, checkpoint_callback],
                 max_epochs=15,
                 # plugins=DDPPlugin(
                 #     find_unused_parameters=True
                 # ),  # We ignore params from cross-attention.
                 log_every_n_steps=1,
-                logger=TensorBoardLogger(
-                    save_dir=os.getcwd(),
-                    version=experiment_name + experiment_suffix,
-                    name="lightning_logs",
-                ),
+                logger=WandbLogger(project='T5VAE-toxic', name='pretrain_encoder'),
             )
 
             trainer.fit(
@@ -217,9 +218,7 @@ if __name__ == "__main__":
             #     find_unused_parameters=True
             # ),  # We ignore params from cross-attention.
             log_every_n_steps=1,
-            logger=TensorBoardLogger(
-                save_dir=os.getcwd(), version=experiment_name, name="lightning_logs"
-            ),
+            loggerlogger=WandbLogger(project='T5VAE-toxic', name='pretrain_encoder'),
         )
         trainer.fit(
             model,
