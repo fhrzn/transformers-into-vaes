@@ -20,7 +20,7 @@ from torch.utils.data import DataLoader
 
 # wandb
 import wandb
-from pytorc_lightning.loggers import WandbLogger
+from pytorch_lightning.loggers import WandbLogger
 
 pretty_errors.configure(
     filename_display=pretty_errors.FILENAME_EXTENDED,
