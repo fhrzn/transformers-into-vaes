@@ -218,7 +218,7 @@ if __name__ == "__main__":
             #     find_unused_parameters=True
             # ),  # We ignore params from cross-attention.
             log_every_n_steps=1,
-            loggerlogger=WandbLogger(project='T5VAE-toxic', name='pretrain_encoder'),
+            logger=WandbLogger(project='T5VAE-toxic', name='pretrain_vae'),
         )
         trainer.fit(
             model,
