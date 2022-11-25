@@ -13,9 +13,10 @@ def top_k_top_p_filtering(logits, top_k=0, top_p=0.0, filter_value=-float("Inf")
         top_p >0.0: keep the top tokens with cumulative probability >= top_p (nucleus filtering).
             Nucleus filtering is described in Holtzman et al. (http://arxiv.org/abs/1904.09751)
     """
-    assert (
-        logits.dim() == 1
-    )  # batch size 1 for now - could be updated for more but the code would be less clear
+    # assert (
+    #     logits.dim() == 1
+    # )  # batch size 1 for now - could be updated for more but the code would be less clear
+    logits_dim = logits.size(0)
     top_k = min(top_k, logits.size(-1))  # Safety check
     if top_k > 0:
         # Remove all tokens with a probability less than the last token of the top-k
@@ -33,7 +34,10 @@ def top_k_top_p_filtering(logits, top_k=0, top_p=0.0, filter_value=-float("Inf")
         sorted_indices_to_remove[..., 0] = 0
 
         indices_to_remove = sorted_indices[sorted_indices_to_remove]
-        logits[indices_to_remove] = filter_value
+        # logits[indices_to_remove] = filter_value
+        for ix in range(logits_dim):
+            rm_indices = indices_to_remove[ix][indices_to_remove[ix] > 0]   # filter indices to remove only
+            logits[ix, rm_indices] = filter_value
     return logits
 
 
