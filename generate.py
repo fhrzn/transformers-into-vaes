@@ -57,7 +57,15 @@ def generate(model, starter_tokens, **kwargs):
     # generated = torch.tensor(
     #     [self.tokenizer.eos_token_id, self.tokenizer.bos_token_id]
     # 3).unsqueeze(0)
-    generated = torch.tensor(starter_tokens).unsqueeze(0).to(model.device)
+
+    inp_dim = 1
+    if kwargs.get('input_ids') is not None:
+        inp_dim = kwargs.get('input_ids').size(0)
+    elif kwargs.get('sampled_z') is not None:
+        inp_dim = kwargs.get('sampled_z').size(0)
+
+    # generated = torch.tensor(starter_tokens).unsqueeze(0).to(model.device)
+    generated = torch.tensor(starter_tokens * inp_dim).unsqueeze(-1).to(model.device)
 
     output, encoder_outputs = None, None
     while generated.shape[1] < 1000:
@@ -75,7 +83,8 @@ def generate(model, starter_tokens, **kwargs):
                 # encoder_attention_mask=None, #new_attention_mask,  # Modified.
                 # attention_mask=encoder_mask,
                 encoder_outputs=encoder_outputs,
-                decoder_input_ids=generated[:, -1].unsqueeze(0),
+                # decoder_input_ids=generated[:, -1].unsqueeze(0),
+                decoder_input_ids=generated[:, -1].unsqueeze(-1),
                 # encoder_hidden_states=encoder_outputs[0],  # Modified.
                 # encoder_attention_mask=attention_mask,  # Modified.
                 # head_mask=kwargs.get("decoder_head_mask"),
@@ -93,21 +102,27 @@ def generate(model, starter_tokens, **kwargs):
         top_k = kwargs.get("top_k") if "top_k" in kwargs else 0
         top_p = kwargs.get("top_p") if "top_p" in kwargs else 0
 
-        logits = output.logits[0, -1, :] / temperature
+        # logits = output.logits[0, -1, :] / temperature
+        logits = output.logits[:, -1, :] / temperature
         filtered_logits = top_k_top_p_filtering(logits, top_k=top_k, top_p=top_p)
 
         probabilities = F.softmax(filtered_logits, dim=-1)
         next_token_id = torch.multinomial(probabilities, 1)
         # next_token_id = torch.argmax(filtered_logits, dim=-1).unsqueeze(0)
 
-        generated = torch.cat((generated, next_token_id.unsqueeze(0)), dim=1)
+        generated = torch.cat((generated, next_token_id), dim=1)
         past = output.past_key_values
         encoder_outputs = BaseModelOutput(
             last_hidden_state=output.encoder_last_hidden_state,
             hidden_states=output.encoder_hidden_states,
             attentions=output.encoder_attentions,
         )
-        if next_token_id == model.tokenizer.eos_token_id:
+        # if next_token_id == model.tokenizer.eos_token_id:
+        #     break
+
+        # stop generation if all records has eos_token
+        total_eos = sum([1 if model.tokenizer.eos_token_id in gen else 0 for gen in generated])
+        if total_eos == generated.size(0):
             break
 
     return generated
