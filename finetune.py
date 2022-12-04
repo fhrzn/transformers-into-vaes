@@ -48,6 +48,9 @@ if __name__ == "__main__":
     parser.add_argument(
         "-ckpt", "--checkpoint-path", help="Checkpoint path", default=None
     )
+    parser.add_argument(
+        '-wn', '--wandb-run-name', help="WandB Experiment Run Name", default="pretrain"
+    )
     args = parser.parse_args()
 
     experiment_name = (
@@ -163,7 +166,7 @@ if __name__ == "__main__":
                 #     find_unused_parameters=True
                 # ),  # We ignore params from cross-attention.
                 log_every_n_steps=1,
-                logger=WandbLogger(project='T5VAE-toxic', name='pretrain_encoder'),
+                logger=WandbLogger(project='T5VAE-toxic', name=f'{args.wandb_run_name}'),
             )
 
             trainer.fit(
@@ -218,7 +221,7 @@ if __name__ == "__main__":
             #     find_unused_parameters=True
             # ),  # We ignore params from cross-attention.
             log_every_n_steps=1,
-            logger=WandbLogger(project='T5VAE-toxic', name='pretrain_vae'),
+            logger=WandbLogger(project='T5VAE-toxic', name=f'{args.wandb_run_name}'),
         )
         trainer.fit(
             model,
