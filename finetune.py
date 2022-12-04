@@ -229,6 +229,8 @@ if __name__ == "__main__":
             val_dataloaders=val_dataloader,
         )
 
+        print(f'Finished finetuning. Checkpoint saved at {checkpoint_callback.best_model_path}')
+
     elif args.checkpoint_path:
         model = model_class.load_from_checkpoint(
             args.checkpoint_path,
